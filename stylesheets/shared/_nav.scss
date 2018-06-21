@@ -1,0 +1,132 @@
+$nav-width-desktop: 300px;
+$nav-width-tablet: 50%;
+.nav-container{
+	padding: 10px;
+	width: 100%;
+	background-color: #000;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 9;
+	.toggle-nav {
+		width: 30px;
+		height: 24px;
+		position: relative;
+		cursor: pointer;
+		float: right;
+		padding: 5px;
+		border: none;
+		top: -2px;
+		background: none;
+		outline: none;
+		&:before,
+		&:after {
+			content: "";
+		}
+
+		&:before,
+		&:after,
+		.toggle-icon {
+			display: block;
+			position: absolute;
+			height: 3px;
+			width: 100%;
+			background-color: $blue;
+			border-radius: 3px;
+			left: 0;
+			top: 0;
+			@include transform(rotate(0deg));
+			@include transition(250ms $easeOutSine);
+		}
+
+		.toggle-icon {
+			top: 11px;
+		}
+
+		&:after {
+			top: 21px;
+		}
+	}
+	.nav-content {
+		position: fixed;
+		width: 100%;
+		top: 40px;
+		left: 0;
+		background-color: white;
+		height: calc(100% - 40px);
+		overflow: hidden;
+		@include transform(translateX(100%));
+		@include transition(transform 300ms $easeOutQuad);
+		ul {
+			padding: 0;
+			text-align: center;
+			li {
+				padding: 10px 0px;
+				a {
+					color: #000;
+					text-transform: uppercase;
+					text-decoration: none;
+				}
+			}
+		}
+
+		/* media queries */
+		@include on-device($tablet) {
+			right: 0;
+			left: auto;
+			width: $nav-width-tablet;
+		}
+		@include on-device($desktop) {
+			right: 0;
+			left: auto;
+			width: $nav-width-desktop;
+			@include transform(translateX($nav-width-desktop));
+			@include transition(transform 200ms $easeOutQuad);
+		}
+	}
+	&.active {
+		.toggle-nav {
+			&:before,
+			&:after,
+			.toggle-icon {
+				height: 2px;
+				background-color: $red;
+			}
+			&:before {
+				@include transform(rotate(135deg));
+				top: 10px;
+			}
+			&:after {
+				top: 10px;
+				@include transform(rotate(-135deg));
+			}
+			.toggle-icon {
+				opacity: 0;
+				left: 15px;
+				width: 0;
+			}
+		}
+		.nav-content {
+			@include transform(translateX(0%));
+		}
+		+ #main-wrapper {
+			opacity: 0;
+			@include transform(translateX(-20%));
+			a, button {
+				-webkit-pointer-events: none;
+				-moz-pointer-events: none;
+				pointer-events: none;
+			}
+			/* media queries */
+			@include on-device($tablet) {
+				opacity: 0.8;
+				@include transform(translateX(-$nav-width-tablet));
+			}
+			@include on-device($desktop) {
+				@include transition(all 150ms $easeOutQuad);
+				opacity: 0.5;
+				@include transform(scale(0.98));
+			}
+		}
+	}
+}
